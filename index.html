@@ -1,0 +1,622 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>SANART — музыкальная экосистема · Алматы</title>
+  <meta name="description" content="SANART — музыкальная экосистема в Алматы. Вокал, гитара, фортепиано. Здесь можно звучать по-своему, становиться смелее и получать удовольствие от музыки." />
+  <meta name="theme-color" content="#0b0b10" />
+  <link rel="icon" href="assets/ig/logo.jpg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400..700&family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400;1,500;1,600&family=JetBrains+Mono:wght@400;500&family=Manrope:wght@300..700&family=Unbounded:wght@200..900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+  <!-- ============ PRELOADER: настройка по камертону ============ -->
+  <div class="loader" id="loader" aria-hidden="true">
+    <div class="loader__tuner">
+      <svg viewBox="0 0 200 110" class="loader__arc">
+        <path d="M10 100 A90 90 0 0 1 190 100" />
+        <g class="loader__ticks"></g>
+        <line x1="100" y1="100" x2="100" y2="22" class="loader__needle" />
+      </svg>
+      <div class="loader__hz"><span id="hz">000</span><small>Hz</small></div>
+      <div class="loader__note hand">настраиваемся на «ля»…</div>
+    </div>
+  </div>
+
+  <!-- ============ СВЯЗУЮЩИЙ ОБЪЕКТ: струна + сферы ============ -->
+  <canvas id="string" class="string" aria-hidden="true"></canvas>
+  <div class="bg-orbs" aria-hidden="true"><div class="orb orb--a"></div><div class="orb orb--b"></div></div>
+  <div class="grain" aria-hidden="true"></div>
+
+  <!-- ============ КУРСОР ============ -->
+  <div class="cursor" aria-hidden="true">
+    <div class="cursor__ring"><span class="cursor__label"></span></div>
+    <div class="cursor__dot"></div>
+  </div>
+
+  <!-- ============ HEADER ============ -->
+  <header class="header" id="header">
+    <a href="#top" class="header__logo" data-magnetic aria-label="SANART — наверх">
+      <svg viewBox="0 0 64 48" class="mount"><path d="M2 46 L22 6 L42 46 Z M22 46 L40 12 L62 46 Z" /></svg>
+      <span>SANART</span>
+    </a>
+    <nav class="header__nav" aria-label="Разделы">
+      <a href="#about" data-cursor="‹›">О нас</a>
+      <a href="#play" data-cursor="‹›">Направления</a>
+      <a href="#voice-test" data-cursor="‹›">Тест голоса</a>
+            <a href="#cases" data-cursor="‹›">Кейсы</a>
+      <a href="#team" data-cursor="‹›">Команда</a>
+      <a href="#contact" data-cursor="‹›">Контакты</a>
+    </nav>
+    <button class="header__sound" id="soundToggle" aria-pressed="true" data-cursor="звук" aria-label="Звук сайта">
+      <i></i><i></i><i></i><i></i><i></i>
+    </button>
+    <a href="#contact" class="btn btn--sm" data-magnetic>Пробный урок</a>
+    <div class="header__progress"><span></span></div>
+  </header>
+
+  <main id="top">
+
+    <!-- ============ 1. HERO ============ -->
+    <section class="hero" data-tone="#ffd23f">
+      <p class="eyebrow hero__eyebrow"><span>Музыкальная эко-система</span><span class="dot"></span><span>Алматы</span><span class="dot"></span><span>с 2020</span></p>
+
+      <h1 class="hero__title" id="heroTitle" aria-label="SANART">
+        <span>S</span><span>A</span><span>N</span><span>A</span><span>R</span><span>T</span>
+      </h1>
+
+      <div class="hero__hand hand">
+        <span>звучи по-своему</span>
+        <svg viewBox="0 0 320 40" class="scribble"><path d="M6 28 C 60 8, 120 36, 170 20 S 270 6, 314 22" /></svg>
+      </div>
+
+      <p class="hero__lead">Вокал <em>•</em> Гитара <em>•</em> Фортепиано</p>
+      <p class="hero__formats mono">дети и взрослые · индивидуально · онлайн · студия звукозаписи</p>
+
+      <div class="hero__hint">
+        <span class="mono">проведи курсором по струне</span>
+        <span class="hero__arrow"></span>
+      </div>
+
+      <div class="hero__stack" aria-hidden="true">
+        <img src="assets/ig/r01.jpg" alt="" />
+        <img src="assets/ig/r04.jpg" alt="" />
+        <img src="assets/ig/r02.jpg" alt="" />
+      </div>
+    </section>
+
+    <!-- ============ 2. МАНИФЕСТ ============ -->
+    <section class="manifest" id="about" data-tone="#f3efe6">
+      <p class="eyebrow">( 01 ) — манифест</p>
+      <p class="manifest__text" id="manifest">
+        Здесь можно <em class="serif">звучать</em> по-своему, становиться <em class="serif">смелее</em> и получать удовольствие от музыки.
+      </p>
+      <p class="manifest__sign hand">— команда SANART</p>
+      <blockquote class="manifest__quote">
+        <p>«SANART всегда был не про “уроки”. Про людей, которые приходят к людям и начинают звучать. Иногда тихо. Иногда мощно. Но всегда честно и безопасно.»</p>
+        <cite class="mono">из поста SANART, 31.12.2025</cite>
+      </blockquote>
+    </section>
+
+    <!-- ============ 3. ЦИФРЫ ============ -->
+    <section class="numbers" data-tone="#ff5fa2">
+      <div class="numbers__ring">
+        <div class="num" data-magnetic>
+          <b data-count="7200" data-plus>0</b>
+          <p>подписчиков <br/>в Instagram</p>
+        </div>
+        <div class="num" data-magnetic>
+          <b data-count="5" data-dec="1">0</b>
+          <p>рейтинг в 2ГИС <br/>по 92 оценкам</p>
+        </div>
+        <div class="num" data-magnetic>
+          <b data-count="57">0</b>
+          <p>отзывов учеников <br/>в 2ГИС</p>
+        </div>
+        <div class="num num--inf" data-magnetic>
+          <b data-count="2020" data-raw>0</b>
+          <p>год, с которого <br/>мы звучим</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 4. НАПРАВЛЕНИЯ (pinned) ============ -->
+    <section class="play" id="play" data-tone="#ffd23f">
+      <div class="play__pin">
+        <p class="eyebrow play__eyebrow">( 02 ) — что звучит у нас</p>
+
+        <div class="play__words" aria-hidden="true">
+          <span class="play__word">ВОКАЛ</span>
+          <span class="play__word">ГИТАРА</span>
+          <span class="play__word">ФОРТЕПИАНО</span>
+        </div>
+
+        <div class="play__stage">
+          <!-- ВОКАЛ -->
+          <article class="inst inst--voice" data-i="0">
+            <div class="inst__glass">
+              <p class="inst__num mono">01 / 03</p>
+              <h2 class="inst__title">Вокал</h2>
+              <p class="inst__text">Распевка, дыхание, а потом песни — около 70% урока ты поёшь, и песни выбираешь сам. Снимаем зажимы и ищем <em class="serif">твой</em> тембр, а не копию чужого.</p>
+              <button class="voice-btn" id="voiceBtn" data-cursor="держи">
+                <span class="voice-btn__mic"></span>
+                <span>Зажми — распоёмся</span>
+              </button>
+              <div class="voice-bars" id="voiceBars"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+              <p class="inst__note hand">до-ми-соль-ми-до ♪</p>
+              <a class="inst__link mono" href="#voice-test" data-cursor="↓">узнать свой тип голоса →</a>
+            </div>
+          </article>
+
+          <!-- ГИТАРА -->
+          <article class="inst inst--guitar" data-i="1">
+            <div class="inst__glass">
+              <p class="inst__num mono">02 / 03</p>
+              <h2 class="inst__title">Гитара</h2>
+              <p class="inst__text">Акустика, классика, электрогитара и укулеле. Аккорды, бой, перебор и любимые песни — сначала для души, потом для зала PRO SANART.</p>
+              <div class="strings" id="strings" data-cursor="проведи">
+                <svg viewBox="0 0 400 150" preserveAspectRatio="none">
+                  <path d="M0 15 Q200 15 400 15"/><path d="M0 39 Q200 39 400 39"/><path d="M0 63 Q200 63 400 63"/>
+                  <path d="M0 87 Q200 87 400 87"/><path d="M0 111 Q200 111 400 111"/><path d="M0 135 Q200 135 400 135"/>
+                </svg>
+              </div>
+              <p class="inst__note hand">проведи по струнам — это Em ✶</p>
+            </div>
+          </article>
+
+          <!-- ФОРТЕПИАНО -->
+          <article class="inst inst--piano" data-i="2">
+            <div class="inst__glass">
+              <p class="inst__num mono">03 / 03</p>
+              <h2 class="inst__title">Фортепиано</h2>
+              <p class="inst__text">Нотная грамота без скуки, гармония, аккомпанемент себе и друзьям. Клавиши, которые перестают пугать.</p>
+              <div class="keys" id="keys" data-cursor="играй">
+                <button data-n="0">A</button><button data-n="2">S</button><button data-n="4">D</button><button data-n="5">F</button>
+                <button data-n="7">G</button><button data-n="9">H</button><button data-n="11">J</button><button data-n="12">K</button>
+                <span class="keys__b" style="--x:1" data-n="1"></span><span class="keys__b" style="--x:2" data-n="3"></span>
+                <span class="keys__b" style="--x:4" data-n="6"></span><span class="keys__b" style="--x:5" data-n="8"></span><span class="keys__b" style="--x:6" data-n="10"></span>
+              </div>
+              <p class="inst__note hand">клавиши A–K на клавиатуре тоже работают</p>
+            </div>
+          </article>
+        </div>
+
+        <div class="play__dots"><i></i><i></i><i></i></div>
+      </div>
+    </section>
+
+    <!-- ============ 4½. ТЕСТ ГОЛОСА ============ -->
+    <section class="vt" id="voice-test" data-tone="#b98cff">
+      <p class="eyebrow">( ♪ ) — интерактив</p>
+      <h2 class="h2">Какой у тебя <span class="hand hand--big">голос?</span></h2>
+      <p class="vt__lead">Спой самую низкую ноту, самую высокую и скажи пару слов. По диапазону и высоте речи мы подскажем, на что похож твой голос: бас, баритон, тенор, контральто, меццо-сопрано или сопрано.</p>
+
+      <div class="vt__card" id="vt">
+        <ol class="vt__steps" id="vtSteps" aria-label="Шаги теста">
+          <li class="on">Старт</li><li>Низ</li><li>Верх</li><li>Речь</li><li>Итог</li>
+        </ol>
+
+        <!-- экран 1: старт -->
+        <div class="vt__screen" data-screen="start">
+          <div class="vt__orb" aria-hidden="true"><i></i><i></i><i></i></div>
+          <button class="btn btn--big vt__go" id="vtStart" data-magnetic><span>Включить микрофон</span></button>
+          <button class="vt__alt" id="vtManual" type="button">Нет микрофона? Пройди по клавишам →</button>
+          <p class="vt__privacy mono">звук обрабатывается прямо в браузере и никуда не отправляется</p>
+        </div>
+
+        <!-- экран 2: пение / речь -->
+        <div class="vt__screen" data-screen="sing" hidden>
+          <p class="vt__task" id="vtTask">Тяни самую низкую ноту</p>
+          <p class="vt__hint hand" id="vtHint">на «а-а-а», спокойно, без хрипа</p>
+          <div class="vt__meter">
+            <svg class="vt__ring" viewBox="0 0 120 120" aria-hidden="true">
+              <circle cx="60" cy="60" r="54" />
+              <circle id="vtProg" cx="60" cy="60" r="54" />
+            </svg>
+            <div class="vt__readout" aria-live="polite">
+              <b id="vtNote">—</b>
+              <span id="vtNoteRu" class="hand">пой</span>
+              <small id="vtHz" class="mono">0 Hz</small>
+            </div>
+          </div>
+          <canvas id="vtTrace" class="vt__trace" aria-hidden="true"></canvas>
+          <div class="vt__ctrl">
+            <button class="btn" id="vtRec" type="button"><span>Записать · 4 сек</span></button>
+            <button class="vt__alt" id="vtSkip" type="button">Пропустить шаг</button>
+          </div>
+          <p class="vt__msg mono" id="vtMsg"></p>
+        </div>
+
+        <!-- экран 2б: вручную по клавишам -->
+        <div class="vt__screen" data-screen="manual" hidden>
+          <p class="vt__task">Нажимай клавиши и подпевай</p>
+          <p class="vt__hint hand">отметь самую низкую и самую высокую ноту, которые удобно спеть</p>
+          <div class="chips vt__chips" role="radiogroup" aria-label="Голос в речи">
+            <label><input type="radio" name="vtSex" value="m" /><span>Мужской голос</span></label>
+            <label><input type="radio" name="vtSex" value="f" /><span>Женский голос</span></label>
+          </div>
+          <p class="vt__picked mono" id="vtPicked">низ: — · верх: —</p>
+          <div class="vt__ctrl">
+            <button class="btn" id="vtManualDone" type="button" disabled><span>Показать результат</span></button>
+            <button class="vt__alt" id="vtManualReset" type="button">Сбросить</button>
+          </div>
+        </div>
+
+        <!-- экран 3: результат -->
+        <div class="vt__screen" data-screen="result" hidden>
+          <p class="mono vt__kicker">похоже, у тебя</p>
+          <h3 class="vt__type" id="vtType">—</h3>
+          <p class="vt__desc" id="vtDesc"></p>
+          <p class="vt__stars" id="vtStars"></p>
+          <div class="vt__bars" id="vtBars"></div>
+          <p class="vt__range mono" id="vtRange"></p>
+          <div class="vt__ctrl">
+            <a class="btn" href="#contact" id="vtCta" data-magnetic><span>Проверить с педагогом</span></a>
+            <button class="vt__alt" id="vtAgain" type="button">Пройти ещё раз</button>
+          </div>
+          <p class="vt__disc">Это ориентир, а не диагноз. Тип голоса определяется не только диапазоном, но и тембром, переходными нотами и тем, где голосу удобно жить. У нетренированного голоса диапазон обычно уже — за пару месяцев занятий он раскрывается. Если тебе меньше 15 лет, голос ещё формируется. Фальцет и шум вокруг тоже могут сбить результат. Точно скажет педагог на пробном уроке.</p>
+          <p class="vt__src mono">диапазоны: New Grove Dictionary of Opera, Wikipedia</p>
+        </div>
+
+        <!-- карта диапазонов: общая для всех экранов -->
+        <div class="vt__map">
+          <div class="vt__kbwrap">
+            <div class="vt__bands" id="vtBands" aria-hidden="true"></div>
+            <div class="vt__kb" id="vtKb" data-cursor="нота"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 5. ПУТЬ (horizontal storytelling) ============ -->
+    <section class="path" id="path" data-tone="#7aa2ff">
+      <div class="path__pin">
+        <div class="path__head">
+          <p class="eyebrow">( 03 ) — путь ученика</p>
+          <h2 class="h2">От первой ноты <br/><span class="serif">до своей сцены</span></h2>
+        </div>
+        <div class="path__track" id="pathTrack">
+          <svg class="path__line" viewBox="0 0 3000 200" preserveAspectRatio="none" aria-hidden="true">
+            <path id="pathLine" d="M0 100 C 250 20, 450 180, 750 100 S 1250 20, 1500 100 S 2000 180, 2250 100 S 2750 20, 3000 100" />
+          </svg>
+
+          <article class="step">
+            <span class="step__n">01</span>
+            <div class="step__media"><img src="assets/ig/r03.jpg" alt="Ученик SANART на балконе ночью — кадр из рубрики PRO ZVOOK" loading="lazy" /></div>
+            <h3>Пробный урок</h3>
+            <p>Знакомимся, слушаем, где ты сейчас, и подбираем педагога под тебя. Свою любимую песню споёшь уже на первом уроке.</p>
+            <span class="step__hand hand">страшно? это нормально</span>
+          </article>
+          <article class="step step--up">
+            <span class="step__n">02</span>
+            <div class="step__media"><img src="assets/ig/r07.jpg" alt="Арухан, ученица Адель — рубрика «История души»" loading="lazy" /></div>
+            <h3>Голос открывается</h3>
+            <p>Дыхание, опора, первые «вау, это я?». «Здесь учишься не петь правильно, а слышать себя», — пишет ученица в 2ГИС.</p>
+            <span class="step__hand hand">первые мурашки</span>
+          </article>
+          <article class="step">
+            <span class="step__n">03</span>
+            <div class="step__media"><img src="assets/ig/r08.jpg" alt="Дуэт «Простая песня» с педагогом Ферой — рубрика «Пой со мной»" loading="lazy" /></div>
+            <h3>Первая песня</h3>
+            <p>Записываешь песню в нашей студии звукозаписи или дуэт с педагогом для рубрики «Пой со мной».</p>
+            <span class="step__hand hand">твой трек в ленте</span>
+          </article>
+          <article class="step step--up">
+            <span class="step__n">04</span>
+            <div class="step__media"><img src="assets/ig/r01.jpg" alt="Концерт PRO SANART — ученики выступают в кругу" loading="lazy" /></div>
+            <h3>Сцена PRO SANART</h3>
+            <p>Живые вечера, концерты и съёмки выступлений, где ученики поют в кругу своих.</p>
+            <span class="step__hand hand">ты уже на сцене!</span>
+          </article>
+          <article class="step">
+            <span class="step__n">05</span>
+            <div class="step__media"><img src="assets/ig/r05.jpg" alt="Рубрика «История души» — ученик рассказывает свою историю" loading="lazy" /></div>
+            <h3>История души</h3>
+            <p>Ты рассказываешь свою историю — и кто-то решается прийти благодаря тебе.</p>
+            <span class="step__hand hand">круг замыкается ♡</span>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 6. ДО / ПОСЛЕ ============ -->
+    <section class="ba" id="results" data-tone="#ff5fa2">
+      <p class="eyebrow">( 04 ) — результат</p>
+      <h2 class="h2 ba__title">Тот же человек. <span class="serif">Другой звук.</span></h2>
+
+      <div class="ba__frame" id="baFrame" data-cursor="тяни">
+        <div class="ba__side ba__before">
+          <img src="assets/ig/r03.jpg" alt="До: один, в капюшоне, на ночном балконе" />
+          <svg class="ba__wave" viewBox="0 0 600 120" preserveAspectRatio="none"><path id="waveBefore" /></svg>
+          <div class="ba__label"><b>ДО</b><span class="hand">«мне неловко петь при людях»</span></div>
+          <ul class="ba__tags"><li>зажатость</li><li>страх сцены</li><li>«нет слуха»</li></ul>
+        </div>
+        <div class="ba__side ba__after" id="baAfter">
+          <img src="assets/ig/r01.jpg" alt="После: выступление на вечере PRO SANART" />
+          <svg class="ba__wave" viewBox="0 0 600 120" preserveAspectRatio="none"><path id="waveAfter" /></svg>
+          <div class="ba__label"><b>ПОСЛЕ</b><span class="hand">«хочу ещё одну песню!»</span></div>
+          <ul class="ba__tags"><li>свободное дыхание</li><li>своя песня</li><li>сцена</li></ul>
+        </div>
+        <div class="ba__handle" id="baHandle"><span>‹ ›</span></div>
+      </div>
+      <p class="ba__caption mono">потяни разделитель — посмотри, как меняется звук</p>
+    </section>
+
+    <!-- ============ 6½. КЕЙСЫ ============ -->
+    <section class="cases" id="cases" data-tone="#ffd23f">
+      <p class="eyebrow">( 04½ ) — реальные кейсы</p>
+      <h2 class="h2">Было <span class="serif">→</span> стало</h2>
+      <p class="cases__lead">Истории из постов SANART и отзывов учеников в 2ГИС. Листай колоду: тяни карточку или жми стрелки.</p>
+      <div class="deck" id="deck" data-cursor="тяни">
+        <article class="case" data-src="https://www.instagram.com/sanaart.kz/reel/CbUcTHtF8m3/">
+          <img src="assets/ig2/c_timur.jpg" alt="Тимур на сертификации" loading="lazy" />
+          <div class="case__body"><p class="case__who"><b>Тимур</b><span class="mono">вокал · Instagram</span></p>
+          <dl><dt>было</dt><dd>начал заниматься вокалом</dd><dt>стало</dt><dd>профессиональная съёмка выступления — «Лодочка плыви»</dd><dt>срок</dt><dd>2 месяца</dd></dl></div>
+        </article>
+        <article class="case" data-src="https://www.instagram.com/sanaart.kz/p/CPvlXyntTzR/">
+          <img src="assets/ig2/c_asmin.jpg" alt="Асмин на сертификации" loading="lazy" />
+          <div class="case__body"><p class="case__who"><b>Асмин</b><span class="mono">дети · Instagram</span></p>
+          <dl><dt>было</dt><dd>«в начале к нам приходят робкие и стеснительные дети»</dd><dt>стало</dt><dd>сертификация: артистизм, эмоции, уверенность на сцене</dd><dt>срок</dt><dd>больше 2 месяцев</dd></dl></div>
+        </article>
+        <article class="case case--text" data-src="https://2gis.kz/almaty/firm/70000001033924141/tab/reviews">
+          <div class="case__big hand">страх микрофона</div>
+          <div class="case__body"><p class="case__who"><b>Алтынай А.</b><span class="mono">вокал · 2ГИС</span></p>
+          <dl><dt>было</dt><dd>«пришла впервые в жизни с запросом преодолеть страх микрофона»</dd><dt>стало</dt><dd>«избавилась не только от него, но и стала получать колоссальное удовольствие»</dd><dt>срок</dt><dd>1 месяц · педагог Бахтияр</dd></dl></div>
+        </article>
+        <article class="case" data-src="https://www.instagram.com/sanaart.kz/reel/CHkoeJLjYVu/">
+          <img src="assets/ig2/c_ansar.jpg" alt="Ансар, ученик студии" loading="lazy" />
+          <div class="case__body"><p class="case__who"><b>Ансар</b><span class="mono">Instagram</span></p>
+          <dl><dt>было</dt><dd>пришёл новичком</dd><dt>стало</dt><dd>«показывает хорошие результаты» — выступление в ленте студии</dd><dt>срок</dt><dd>5 месяцев</dd></dl></div>
+        </article>
+        <article class="case case--text" data-src="https://2gis.kz/almaty/firm/70000001033924141/tab/reviews">
+          <div class="case__big hand">боль в челюсти</div>
+          <div class="case__body"><p class="case__who"><b>Karlygash B.</b><span class="mono">вокал · 2ГИС</span></p>
+          <dl><dt>было</dt><dd>прошлые педагоги не помогли с болью в челюсти при пении</dd><dt>стало</dt><dd>«поняла, в чём проблема, и потихоньку заново переучиваюсь петь правильно»</dd><dt>срок</dt><dd>1 месяц · педагог Алуа</dd></dl></div>
+        </article>
+        <article class="case" data-src="https://www.instagram.com/sanaart.kz/reel/CNCw8WYjVDF/">
+          <img src="assets/ig2/c_margulan.jpg" alt="Маргулан с гитарой" loading="lazy" />
+          <div class="case__body"><p class="case__who"><b>Маргулан</b><span class="mono">Instagram</span></p>
+          <dl><dt>было</dt><dd>«возраст — помеха?»</dd><dt>стало</dt><dd>«творчество живёт в каждом из нас, и возраст этому не помеха»</dd><dt>формат</dt><dd>индивидуальные занятия</dd></dl></div>
+        </article>
+        <article class="case case--text" data-src="https://2gis.kz/almaty/firm/70000001033924141/tab/reviews">
+          <div class="case__big hand">+100% за урок</div>
+          <div class="case__body"><p class="case__who"><b>Санжар Ә.</b><span class="mono">вокал · 2ГИС</span></p>
+          <dl><dt>было</dt><dd>пришёл на первое занятие</dd><dt>стало</dt><dd>«за первый урок поставили голос так, что стал петь на процентов 100 лучше»</dd><dt>срок</dt><dd>1 урок</dd></dl></div>
+        </article>
+        <article class="case" data-src="https://www.instagram.com/sanaart.kz/reel/CPimLsuFdqX/">
+          <img src="assets/ig2/c_yuksel.jpg" alt="Юксель на сертификации" loading="lazy" />
+          <div class="case__body"><p class="case__who"><b>Юксель</b><span class="mono">вокал · Instagram</span></p>
+          <dl><dt>было</dt><dd>занятия вокалом</dd><dt>стало</dt><dd>сертификация — съёмка выступления</dd><dt>формат</dt><dd>отчётная съёмка</dd></dl></div>
+        </article>
+        <article class="case case--text" data-src="https://2gis.kz/almaty/firm/70000001033924141/tab/reviews">
+          <div class="case__big hand">зажимы</div>
+          <div class="case__body"><p class="case__who"><b>Aruzhan N.</b><span class="mono">вокал · 2ГИС</span></p>
+          <dl><dt>было</dt><dd>страхи и зажимы, жёсткий рабочий график</dd><dt>стало</dt><dd>педагог «помогла справиться с моими страхами и зажимами», расписание подстроили</dd><dt>срок</dt><dd>3 месяца · педагог Дана</dd></dl></div>
+        </article>
+        <article class="case" data-src="https://www.instagram.com/sanaart.kz/reel/CNr_4V9jehc/">
+          <img src="assets/ig2/c_emili.jpg" alt="Эмили, юная ученица" loading="lazy" />
+          <div class="case__body"><p class="case__who"><b>Эмили</b><span class="mono">дети · Instagram</span></p>
+          <dl><dt>было</dt><dd>совсем маленькая ученица</dd><dt>стало</dt><dd>поёт в микрофон в ленте студии — «поддержка педагога и уверенность в себе»</dd><dt>формат</dt><dd>занятия для детей</dd></dl></div>
+        </article>
+        <article class="case case--text" data-src="https://2gis.kz/almaty/firm/70000001033924141/tab/reviews">
+          <div class="case__big hand">уверенность</div>
+          <div class="case__body"><p class="case__who"><b>Назым Д.</b><span class="mono">вокал · 2ГИС</span></p>
+          <dl><dt>было</dt><dd>боялась ошибаться</dd><dt>стало</dt><dd>«вместе с голосом появляется и уверенность, и желание пробовать что-то новое»</dd><dt>срок</dt><dd>3 месяца · педагог Бахтияр</dd></dl></div>
+        </article>
+        <article class="case case--text" data-src="https://2gis.kz/almaty/firm/70000001033924141/tab/reviews">
+          <div class="case__big hand">первая запись</div>
+          <div class="case__body"><p class="case__who"><b>Kamila</b><span class="mono">вокал · 2ГИС</span></p>
+          <dl><dt>было</dt><dd>занятия вокалом с нуля</dd><dt>стало</dt><dd>«новый опыт записи песни… Вижу результаты»</dd><dt>срок</dt><dd>2 месяца · педагог Ферхан</dd></dl></div>
+        </article>
+      </div>
+      <div class="deck__ctrl">
+        <button class="deck__btn" id="deckPrev" type="button" aria-label="Предыдущий кейс" data-cursor="←">←</button>
+        <span class="mono" id="deckCount">01 / 12</span>
+        <button class="deck__btn" id="deckNext" type="button" aria-label="Следующий кейс" data-cursor="→">→</button>
+      </div>
+      <a class="cases__src mono" id="deckSrc" href="#" target="_blank" rel="noopener" data-cursor="↗">открыть источник ↗</a>
+    </section>
+
+    <!-- ============ 7. ИСТОРИИ ДУШИ (3D ring) ============ -->
+    <section class="stories" id="stories" data-tone="#ffd23f">
+      <div class="stories__pin">
+        <div class="stories__head">
+          <p class="eyebrow">( 05 ) — рубрика</p>
+          <h2 class="h2"><span class="hand hand--big">История</span> души</h2>
+          <p class="stories__sub">Наши ученики рассказывают, зачем пришли в музыку и что она в них изменила.</p>
+        </div>
+        <div class="ring" id="ring" data-cursor="крути">
+          <div class="ring__inner" id="ringInner">
+            <a class="card" href="https://www.instagram.com/sanaart.kz/reel/CoM36g2ttaH/" target="_blank" rel="noopener" data-cursor="смотреть"><img src="assets/ig/r06.jpg" alt="O’del поёт «Питер-Владивосток»" loading="lazy"/><span>Пой со мной · O’del</span></a>
+            <a class="card" href="https://www.instagram.com/sanaart.kz/reel/CoFJV9LJRh7/" target="_blank" rel="noopener" data-cursor="смотреть"><img src="assets/ig/r07.jpg" alt="Арухан, ученица Адель" loading="lazy"/><span>Арухан · ученица Адель</span></a>
+            <a class="card" href="https://www.instagram.com/sanaart.kz/reel/Cn9bHf9tA4l/" target="_blank" rel="noopener" data-cursor="смотреть"><img src="assets/ig/r08.jpg" alt="«Простая песня» с Ферой" loading="lazy"/><span>Пой со мной · Фера</span></a>
+            <a class="card" href="https://www.instagram.com/sanaart.kz/reel/Cn1uTtPPgtJ/" target="_blank" rel="noopener" data-cursor="смотреть"><img src="assets/ig/r09.jpg" alt="Динара, ученица Ферхан" loading="lazy"/><span>Динара · ученица Ферхан</span></a>
+            <a class="card" href="https://www.instagram.com/sanaart.kz/reel/Cng_fQZtCs7/" target="_blank" rel="noopener" data-cursor="смотреть"><img src="assets/ig/r10.jpg" alt="Алтынай рассказывает свою историю" loading="lazy"/><span>Алтынай · история души</span></a>
+            <a class="card" href="https://www.instagram.com/sanaart.kz/reel/CnW2K3Ts5b1/" target="_blank" rel="noopener" data-cursor="смотреть"><img src="assets/ig/r11.jpg" alt="Дуэт с педагогом Алуа" loading="lazy"/><span>Пой со мной · Алуа</span></a>
+            <a class="card" href="https://www.instagram.com/sanaart.kz/reel/CnO9_r1tEWU/" target="_blank" rel="noopener" data-cursor="смотреть"><img src="assets/ig/r12.jpg" alt="Максим, ученик студии" loading="lazy"/><span>Максим · ученик Ерке</span></a>
+            <a class="card" href="https://www.instagram.com/sanaart.kz/reel/CouiLp3PEYp/" target="_blank" rel="noopener" data-cursor="смотреть"><img src="assets/ig/r05.jpg" alt="Константин, ученик Ерке" loading="lazy"/><span>Константин · ученик Ерке</span></a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 8. ПОЁМ (vinyl) ============ -->
+    <section class="vinyl" data-tone="#ff5fa2">
+      <p class="eyebrow">( 06 ) — рубрика «Пой со мной»</p>
+      <p class="vinyl__lead">Педагог поёт куплет — ты записываешь дуэт у себя дома. Лучшие дуэты попадают в сторис SANART.</p>
+      <div class="vinyl__wrap">
+        <ul class="vinyl__list vinyl__list--l">
+          <li><a href="https://www.instagram.com/sanaart.kz/reel/CoM36g2ttaH/" target="_blank" rel="noopener" data-img="assets/ig/r06.jpg" data-cursor="▶">Питер — Владивосток <small>O’del</small></a></li>
+          <li><a href="https://www.instagram.com/sanaart.kz/reel/Cn9bHf9tA4l/" target="_blank" rel="noopener" data-img="assets/ig/r08.jpg" data-cursor="▶">Простая песня <small>с Ферой</small></a></li>
+        </ul>
+        <div class="record" id="record">
+          <div class="record__disc">
+            <div class="record__label"><img id="recordImg" src="assets/ig/r06.jpg" alt="" /></div>
+          </div>
+          <div class="record__arm"></div>
+        </div>
+        <ul class="vinyl__list vinyl__list--r">
+          <li><a href="https://www.instagram.com/sanaart.kz/reel/CnW2K3Ts5b1/" target="_blank" rel="noopener" data-img="assets/ig/r11.jpg" data-cursor="▶">Дуэт с Алуа <small>2023</small></a></li>
+          <li><a href="https://www.instagram.com/sanaart.kz/reel/DSfCO4SCtMl/" target="_blank" rel="noopener" data-img="assets/ig/r03.jpg" data-cursor="▶">Помятые простыни <small>Лиса</small></a></li>
+        </ul>
+      </div>
+      <p class="vinyl__hand hand">наведи на трек — пластинка сменится</p>
+    </section>
+
+    <!-- ============ 9. СОБЫТИЯ (marquee) ============ -->
+    <section class="events" data-tone="#ffd23f">
+      <div class="marquee" data-speed="1"><div class="marquee__row">
+        <span>PRO SANART</span><i>✦</i><span class="o">PRO ZVOOK</span><i>✦</i><span>SANART 2026</span><i>✦</i><span class="o">HAPPY NEW YEAR</span><i>✦</i>
+        <span>PRO SANART</span><i>✦</i><span class="o">PRO ZVOOK</span><i>✦</i><span>SANART 2026</span><i>✦</i><span class="o">HAPPY NEW YEAR</span><i>✦</i>
+      </div></div>
+      <div class="marquee marquee--rev" data-speed="-1"><div class="marquee__row">
+        <span class="o serif-i">сертификации</span><i>♪</i><span class="serif-i">CUB PARTY по субботам</span><i>♪</i><span class="o serif-i">батл композиторов</span><i>♪</i><span class="serif-i">онлайн-концерты</span><i>♪</i><span class="o serif-i">клипы</span><i>♪</i>
+        <span class="o serif-i">сертификации</span><i>♪</i><span class="serif-i">CUB PARTY по субботам</span><i>♪</i><span class="o serif-i">батл композиторов</span><i>♪</i><span class="serif-i">онлайн-концерты</span><i>♪</i><span class="o serif-i">клипы</span><i>♪</i>
+      </div></div>
+
+      <div class="events__cards">
+        <a class="ev" href="https://www.instagram.com/sanaart.kz/reel/DSLsW1SCtRX/" target="_blank" rel="noopener" data-cursor="смотреть">
+          <img src="assets/ig/r01.jpg" alt="PRO SANART" loading="lazy" /><div><b>PRO SANART</b><span>живой вечер · декабрь 2025</span></div>
+        </a>
+        <a class="ev" href="https://www.instagram.com/sanaart.kz/reel/DSfCO4SCtMl/" target="_blank" rel="noopener" data-cursor="смотреть">
+          <img src="assets/ig/r03.jpg" alt="PRO ZVOOK — клип «Помятые простыни»" loading="lazy" /><div><b>PRO ZVOOK</b><span>клип «Помятые простыни»: Маулеша, Бахито, Жани, Руся</span></div>
+        </a>
+        <a class="ev" href="https://www.instagram.com/sanaart.kz/reel/DEUKlgBP-oS/" target="_blank" rel="noopener" data-cursor="смотреть">
+          <img src="assets/ig/r04.jpg" alt="Happy New Year SANART" loading="lazy" /><div><b>SANART — ДЛЯ СЧАСТЛИВЫХ</b><span>новогодний пост и новый слоган · 2025</span></div>
+        </a>
+        <a class="ev" href="https://www.instagram.com/sanaart.kz/reel/DS71RKrCgAe/" target="_blank" rel="noopener" data-cursor="смотреть">
+          <img src="assets/ig/r02.jpg" alt="SANART 2026" loading="lazy" /><div><b>«ЭТО ХОРОШО»</b><span>итоги 2025: 80+ имён «наших людей»</span></div>
+        </a>
+      </div>
+      <div class="events__cards events__cards--past">
+        <a class="ev" href="https://www.instagram.com/sanaart.kz/p/CZrotkUtc6x/" target="_blank" rel="noopener" data-cursor="смотреть">
+          <img src="assets/ig2/e_party.jpg" alt="CUB PARTY" loading="lazy" /><div><b>CUB PARTY</b><span>тематические вечера по субботам · 2022</span></div>
+        </a>
+        <a class="ev" href="https://www.instagram.com/sanaart.kz/p/CZevqzzt3P7/" target="_blank" rel="noopener" data-cursor="смотреть">
+          <img src="assets/ig2/e_battle.jpg" alt="Батл YERKE vs KUKEC" loading="lazy" /><div><b>YERKE vs KUKEC</b><span>батл композиторов CUB.SOUND · 2022</span></div>
+        </a>
+        <a class="ev" href="https://www.instagram.com/sanaart.kz/reel/CIadRXoDvfm/" target="_blank" rel="noopener" data-cursor="смотреть">
+          <img src="assets/ig2/e_online.jpg" alt="Онлайн-концерт" loading="lazy" /><div><b>ONLINE-КОНЦЕРТ</b><span>концерт для учеников и друзей · 2020</span></div>
+        </a>
+      </div>
+    </section>
+
+    <!-- ============ 9½. КОМАНДА ============ -->
+    <section class="team" id="team" data-tone="#7aa2ff">
+      <p class="eyebrow">( 06½ ) — люди SANART</p>
+      <h2 class="h2">Те, с кем <span class="hand hand--big">звучишь</span></h2>
+      <div class="dial" id="dial">
+        <div class="dial__center" id="dialCenter" aria-live="polite">
+          <p class="mono dial__role" id="dialRole">основатель · вокал · клавиши</p>
+          <h3 class="dial__name" id="dialName">Бахтияр</h3>
+          <p class="dial__about" id="dialAbout">Его зовут Баха и Бахито. «С ним спокойно, понятно и совсем не страшно ошибаться» — из отзыва в 2ГИС.</p>
+        </div>
+        <button type="button" class="person" data-name="Бахтияр" data-role="основатель · вокал · клавиши" data-about="Его зовут Баха и Бахито. «С ним спокойно, понятно и совсем не страшно ошибаться» — из отзыва в 2ГИС."><span>Б</span></button>
+        <button type="button" class="person" data-name="Асема" data-role="сооснователь · вокал" data-about="«Индивидуальный подход и терпение» — так о её уроках пишут ученики."><span>А</span></button>
+        <button type="button" class="person" data-name="Еркебулан Нурқас" data-role="вокал · композитор · саунд-продюсер" data-about="Ерке — участник The Voice Kazakhstan 2025. «Так подробно и от души всё объясняет» — из отзыва в 2ГИС."><span>Е</span></button>
+        <button type="button" class="person" data-name="Алуа" data-role="вокал · дыхание" data-about="Вела рубрику #cubtrain про дыхание и «логику вокала». «С ней легко, комфортно и уютно»." data-img="assets/ig2/t_alua.jpg"><img src="assets/ig2/t_alua.jpg" alt="Алуа" /></button>
+        <button type="button" class="person" data-name="Phera" data-role="вокал · распевки" data-about="Автор рубрики CUB MOTION: упражнения и «бомбические» распевки каждый вторник." data-img="assets/ig2/t_phera.jpg"><img src="assets/ig2/t_phera.jpg" alt="Phera" /></button>
+        <button type="button" class="person" data-name="Ален" data-role="гитара" data-about="AlenB ведёт «Дневник гитариста»: какую гитару выбрать и как не повторять ошибки новичков." data-img="assets/ig2/t_alen.jpg"><img src="assets/ig2/t_alen.jpg" alt="Ален" /></button>
+        <button type="button" class="person" data-name="Дана" data-role="вокал" data-about="«Нашла ко мне подход сразу и помогла справиться с моими страхами и зажимами» — из отзыва в 2ГИС."><span>Д</span></button>
+        <button type="button" class="person" data-name="Адель" data-role="вокал · дети" data-about="«Умеет найти подход к ребёнку» — пишут родители учеников."><span>А</span></button>
+        <button type="button" class="person" data-name="Cheenah" data-role="психология вокала" data-about="Рубрика «Диалоги о вокале» и #cubpsy — психология вокала: почему мы откладываем пение." data-img="assets/ig2/t_cheenah.jpg"><img src="assets/ig2/t_cheenah.jpg" alt="Cheenah" /></button>
+        <button type="button" class="person" data-name="Куандык" data-role="фортепиано" data-about="Лауреат международных и республиканских конкурсов, преподавал фортепиано в Национальной консерватории им. Курмангазы (по посту 2020 года)." data-img="assets/ig2/t_kuandyk.jpg"><img src="assets/ig2/t_kuandyk.jpg" alt="Куандык" /></button>
+        <button type="button" class="person" data-name="Мадина Бектурганова" data-role="вокал" data-about="Артист и композитор: 5 лет преподавания, 7 лет на сцене, «Бозторгай», Дельфийские игры СНГ (по посту 2020 года)." data-img="assets/ig2/t_madina.jpg"><img src="assets/ig2/t_madina.jpg" alt="Мадина Бектурганова" /></button>
+        <button type="button" class="person" data-name="Эсфирь" data-role="вокал" data-about="«Мне понравилось, как раскрыли мой голос» — из отзыва в 2ГИС, 2025."><span>Э</span></button>
+      </div>
+      <p class="team__note mono">состав собран по постам и отзывам 2020–2025 · кто ведёт сейчас — уточняй в WhatsApp</p>
+    </section>
+
+    <!-- ============ 10. ОТЗЫВЫ (draggable notes) ============ -->
+    <section class="voices" data-tone="#f3efe6">
+      <p class="eyebrow">( 07 ) — что говорят ученики</p>
+      <h2 class="h2">Живая <span class="serif">душевная</span> атмосфера</h2>
+      <p class="voices__score"><b>5,0</b> <span>★★★★★</span> <span class="mono">92 оценки · 57 отзывов в 2ГИС</span></p>
+      <div class="notes" id="notes">
+        <figure class="note" style="--r:-6deg; --x:-32%; --y:-14%" data-cursor="двигай">
+          <blockquote class="hand">Здесь учишься не «петь правильно», а слышать себя — и постепенно находишь свой голос.</blockquote>
+          <figcaption class="mono">Назым Д. · 2ГИС</figcaption>
+        </figure>
+        <figure class="note note--y" style="--r:5deg; --x:30%; --y:-18%" data-cursor="двигай">
+          <blockquote class="hand">Это видео хочется пересматривать и пересматривать. Такая живая душевная атмосфера.</blockquote>
+          <figcaption class="mono">@aliyartist · Instagram</figcaption>
+        </figure>
+        <figure class="note note--p" style="--r:-3deg; --x:-14%; --y:20%" data-cursor="двигай">
+          <blockquote class="hand">Педагогов много разных, метч обязательно найдётся под каждого.</blockquote>
+          <figcaption class="mono">Алена Ш. · 2ГИС</figcaption>
+        </figure>
+        <figure class="note" style="--r:4deg; --x:24%; --y:18%" data-cursor="двигай">
+          <blockquote class="hand">Молодцы ребята, у вас атмосфера мощная 🔥 хочу к вам</blockquote>
+          <figcaption class="mono">@takhirzhan69 · Instagram</figcaption>
+        </figure>
+      </div>
+      <p class="mono voices__hint">записки можно перетаскивать</p>
+    </section>
+
+    <!-- ============ 11. CTA ============ -->
+    <section class="contact" id="contact" data-tone="#ffd23f">
+      <svg class="contact__mount" viewBox="0 0 640 300" aria-hidden="true">
+        <path d="M10 290 L210 20 L410 290 Z" /><path d="M210 290 L390 60 L630 290 Z" />
+      </svg>
+      <div class="contact__glass">
+        <p class="eyebrow">( 08 ) — первый шаг</p>
+        <h2 class="h2">Приходи <span class="hand hand--big">звучать</span></h2>
+        <p class="contact__lead">Оставь заявку на пробный урок — откроется WhatsApp с готовым сообщением, и мы подберём педагога и время.</p>
+        <form class="form" id="form" novalidate>
+          <label class="field"><input name="name" required autocomplete="name" placeholder=" " /><span>Как тебя зовут</span></label>
+          <label class="field"><input name="phone" required inputmode="tel" autocomplete="tel" placeholder=" " /><span>Телефон или WhatsApp</span></label>
+          <fieldset class="chips">
+            <legend class="mono">Что хочешь попробовать</legend>
+            <label><input type="radio" name="dir" value="Вокал" checked /><span>Вокал</span></label>
+            <label><input type="radio" name="dir" value="Гитара" /><span>Гитара</span></label>
+            <label><input type="radio" name="dir" value="Фортепиано" /><span>Фортепиано</span></label>
+          </fieldset>
+          <button class="btn btn--big" type="submit" data-magnetic><span>Записаться</span></button>
+          <p class="form__ok hand" id="formOk" hidden>Спасибо! Открываем WhatsApp — отправь сообщение, и мы ответим ♪</p>
+        </form>
+        <div class="contact__info">
+          <a class="info" href="https://2gis.kz/almaty/firm/70000001033924141" target="_blank" rel="noopener" data-cursor="2ГИС ↗">
+            <span class="mono">адрес</span><b>пр. Аль-Фараби, 53</b><small>ЖК «Астана», цокольный этаж · Бостандыкский р-н</small>
+          </a>
+          <a class="info" href="tel:+77006979166" data-cursor="☎">
+            <span class="mono">телефон</span><b>+7 700 697 91 66</b><small>звонок или WhatsApp</small>
+          </a>
+          <div class="info">
+            <span class="mono">часы</span><b>каждый день</b><small>с 10:00 до 22:00</small>
+          </div>
+        </div>
+        <div class="contact__map">
+          <iframe title="SANART на карте: пр. Аль-Фараби, 53" loading="lazy" src="https://www.openstreetmap.org/export/embed.html?bbox=76.9265%2C43.2195%2C76.9452%2C43.2285&amp;layer=mapnik&amp;marker=43.223987%2C76.935864"></iframe>
+          <span class="contact__pin hand">мы тут ↓ ступеньки в подвал</span>
+        </div>
+        <div class="contact__links">
+          <a href="https://wa.me/77006979166" target="_blank" rel="noopener" data-cursor="↗">WhatsApp</a>
+          <a href="https://www.instagram.com/sanaart.kz/" target="_blank" rel="noopener" data-cursor="↗">Instagram @sanaart.kz</a>
+          <a href="https://2gis.kz/almaty/firm/70000001033924141" target="_blank" rel="noopener" data-cursor="↗">2ГИС</a>
+          <a href="https://yandex.kz/maps/org/sanart/199675161379/" target="_blank" rel="noopener" data-cursor="↗">Яндекс Карты</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer" data-tone="#f3efe6">
+    <div class="footer__big" aria-hidden="true">SAN<span class="serif-i">art</span></div>
+    <div class="footer__row mono">
+      <span>© SANART — для счастливых · раньше CUB.STUDIO · с 2020</span>
+      <span>Аль-Фараби, 53 · +7 700 697 91 66</span>
+      <a href="#top" data-cursor="↑">наверх ↑</a>
+    </div>
+  </footer>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script src="https://unpkg.com/lenis@1.1.13/dist/lenis.min.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/voice-test.js"></script>
+  <script src="js/sections.js"></script>
+</body>
+</html>

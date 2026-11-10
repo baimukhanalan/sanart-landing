@@ -1,0 +1,7 @@
+.DS_Store
+.claude/
+.netlify/
+.vercel/
+# не используются на сайте
+assets/ig/hl1.jpg
+assets/ig2/t_zhansaya.jpg
