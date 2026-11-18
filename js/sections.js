@@ -94,7 +94,7 @@
     layout();
 
     if (window.gsap && window.ScrollTrigger && !reduce) {
-      gsap.from(deck, { y: 160, rotate: -6, opacity: 0, duration: 1.4, ease: "expo.out", scrollTrigger: { trigger: deck, start: "top 85%" } });
+      gsap.from(deck, { y: 100, rotate: -4, opacity: 0, duration: 0.9, ease: "expo.out", scrollTrigger: { trigger: deck, start: "top 92%" } });
     }
   }
 
@@ -133,7 +133,7 @@
 
     if (window.gsap && window.ScrollTrigger && !reduce) {
       gsap.fromTo(dial, { "--rot": "-60deg" }, { "--rot": "60deg", ease: "none", scrollTrigger: { trigger: ".team", start: "top bottom", end: "bottom top", scrub: 1 } });
-      gsap.from(people, { "--s": 0, opacity: 0, stagger: 0.05, duration: 1, ease: "back.out(2)", scrollTrigger: { trigger: dial, start: "top 75%" } });
+      gsap.from(people, { "--s": 0, opacity: 0, stagger: 0.04, duration: 0.8, ease: "back.out(2)", scrollTrigger: { trigger: dial, start: "top 88%" } });
       ScrollTrigger.refresh();
     }
   }

@@ -173,7 +173,7 @@
     }
 
     function resize() {
-      dpr = Math.min(devicePixelRatio || 1, 2);
+      dpr = Math.min(devicePixelRatio || 1, isTouch ? 1.5 : 2);
       W = innerWidth; H = innerHeight;
       cv.width = W * dpr; cv.height = H * dpr;
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
@@ -268,11 +268,13 @@
         ctx.save();
         ctx.translate(n.x, n.y);
         ctx.rotate(n.rot + Math.sin(t + n.ph) * 0.08);
-        ctx.font = `${size | 0}px ${FONT}`;
         if (n.glow > 0.08) {
-          ctx.shadowColor = `rgba(${c},${0.9 * n.glow})`;
-          ctx.shadowBlur = 18 * n.glow;
+          // ореол без shadowBlur (он тяжёлый на телефонах)
+          ctx.font = `${(size * 1.5) | 0}px ${FONT}`;
+          ctx.fillStyle = `rgba(${c},${0.18 * n.glow})`;
+          ctx.fillText(n.g, 0, 0);
         }
+        ctx.font = `${size | 0}px ${FONT}`;
         ctx.fillStyle = `rgba(${c},${a})`;
         ctx.fillText(n.g, 0, 0);
         ctx.restore();
@@ -740,6 +742,13 @@
 
   if (hasGSAP) {
     gsap.registerPlugin(ScrollTrigger);
+    // iOS: показ/скрытие адресной строки не пересчитывает все сцены (иначе рывки)
+    ScrollTrigger.config({ ignoreMobileResize: true });
+    // если картинка или шрифт догрузились позже — пересчитать позиции сцен
+    let rfT = 0;
+    const softRefresh = () => { clearTimeout(rfT); rfT = setTimeout(() => ScrollTrigger.refresh(), 200); };
+    $$("img").forEach((im) => { if (!im.complete) im.addEventListener("load", softRefresh, { once: true }); });
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(softRefresh);
 
     // плавный скролл
     if (window.Lenis && !reduce) {
@@ -787,7 +796,7 @@
     $$(".eyebrow:not(.hero__eyebrow)").forEach((el) => ScrollTrigger.create({ trigger: el, start: "top 85%", once: true, onEnter: () => scramble(el, 1000) }));
 
     // заголовки h2 — подъём с маской
-    $$(".h2").forEach((h) => gsap.from(h, { yPercent: 40, opacity: 0, filter: "blur(10px)", duration: 1.4, ease: "expo.out", scrollTrigger: { trigger: h, start: "top 85%" } }));
+    $$(".h2").forEach((h) => gsap.from(h, { yPercent: 40, opacity: 0, duration: 0.9, ease: "expo.out", scrollTrigger: { trigger: h, start: "top 92%" } }));
 
     // манифест: слова загораются по одному
     const mt = $("#manifest");
@@ -810,7 +819,7 @@
     gsap.from(".manifest__sign", { opacity: 0, x: -40, rotate: -12, scrollTrigger: { trigger: ".manifest__sign", start: "top 85%", end: "top 55%", scrub: true } });
 
     // цифры
-    $$(".num").forEach((n, i) => gsap.from(n, { scale: 0.5, opacity: 0, duration: 1.4, delay: i * 0.1, ease: "expo.out", scrollTrigger: { trigger: ".numbers", start: "top 75%" } }));
+    $$(".num").forEach((n, i) => gsap.from(n, { scale: 0.5, opacity: 0, duration: 0.9, delay: i * 0.06, ease: "expo.out", scrollTrigger: { trigger: ".numbers", start: "top 88%" } }));
     $$("[data-count]").forEach((b) => {
       const end = +b.dataset.count, dec = +(b.dataset.dec || 0), raw = "raw" in b.dataset;
       const o = { v: raw ? end - 40 : 0 };
@@ -869,7 +878,7 @@
       return () => prog.remove();
     });
     mm.add("(max-width: 640px)", () => {
-      $$(".step").forEach((st) => gsap.from(st, { y: 80, opacity: 0, duration: 1.2, ease: "expo.out", scrollTrigger: { trigger: st, start: "top 85%" } }));
+      $$(".step").forEach((st) => gsap.from(st, { y: 60, opacity: 0, duration: 0.9, ease: "expo.out", scrollTrigger: { trigger: st, start: "top 92%" } }));
     });
 
     // до/после — разделитель сам «покачивается» при входе
@@ -884,18 +893,18 @@
       trigger: ".stories", start: "top top", end: "+=140%", pin: ".stories__pin", scrub: true,
       onUpdate: (self) => (ringS.scroll = -self.progress * 315)
     });
-    gsap.from(".ring", { scale: 0.6, opacity: 0, scrollTrigger: { trigger: ".stories", start: "top 80%", end: "top top", scrub: true } });
+    gsap.from(".ring", { scale: 0.6, opacity: 0, scrollTrigger: { trigger: ".stories", start: "top 90%", end: "top 40%", scrub: true } });
 
     // пластинка
-    gsap.from(".record", { rotate: -180, scale: 0.5, opacity: 0, ease: "none", scrollTrigger: { trigger: ".vinyl", start: "top 90%", end: "center center", scrub: true } });
-    gsap.from(".vinyl__list--l li", { x: -120, opacity: 0, stagger: 0.1, scrollTrigger: { trigger: ".vinyl", start: "top 70%", end: "center center", scrub: true } });
-    gsap.from(".vinyl__list--r li", { x: 120, opacity: 0, stagger: 0.1, scrollTrigger: { trigger: ".vinyl", start: "top 70%", end: "center center", scrub: true } });
+    gsap.from(".record", { rotate: -180, scale: 0.5, opacity: 0, ease: "none", scrollTrigger: { trigger: ".vinyl", start: "top 95%", end: "top 35%", scrub: true } });
+    gsap.from(".vinyl__list--l li", { x: -120, opacity: 0, stagger: 0.1, scrollTrigger: { trigger: ".vinyl", start: "top 85%", end: "top 35%", scrub: true } });
+    gsap.from(".vinyl__list--r li", { x: 120, opacity: 0, stagger: 0.1, scrollTrigger: { trigger: ".vinyl", start: "top 85%", end: "top 35%", scrub: true } });
 
     // карточки событий
-    gsap.from(".ev", { y: 140, opacity: 0, rotate: (i) => (i % 2 ? 6 : -6), stagger: 0.12, duration: 1.4, ease: "expo.out", scrollTrigger: { trigger: ".events__cards", start: "top 85%" } });
+    gsap.from(".ev", { y: 140, opacity: 0, rotate: (i) => (i % 2 ? 6 : -6), stagger: 0.08, duration: 0.9, ease: "expo.out", scrollTrigger: { trigger: ".events__cards", start: "top 92%" } });
 
     // записки падают на стол
-    gsap.from(".note", { "--dy": "-420px", opacity: 0, stagger: 0.18, duration: 1.4, ease: "bounce.out", scrollTrigger: { trigger: ".notes", start: "top 75%" } });
+    gsap.from(".note", { "--dy": "-420px", opacity: 0, stagger: 0.12, duration: 1.1, ease: "bounce.out", scrollTrigger: { trigger: ".notes", start: "top 88%" } });
 
     // горы рисуются
     $$(".contact__mount path").forEach((p, i) => {
@@ -903,7 +912,7 @@
       gsap.set(p, { strokeDasharray: L, strokeDashoffset: L });
       gsap.to(p, { strokeDashoffset: 0, ease: "none", scrollTrigger: { trigger: ".contact", start: "top 85%", end: "center center", scrub: true } });
     });
-    gsap.from(".contact__glass", { y: 120, scale: 0.92, opacity: 0, ease: "none", scrollTrigger: { trigger: ".contact", start: "top 85%", end: "top 25%", scrub: true } });
+    gsap.from(".contact__glass", { y: 120, scale: 0.92, opacity: 0, ease: "none", scrollTrigger: { trigger: ".contact", start: "top 95%", end: "top 55%", scrub: true } });
 
     // футер
     gsap.from(".footer__big", { yPercent: 60, scaleY: 0.4, opacity: 0, ease: "none", scrollTrigger: { trigger: ".footer", start: "top bottom", end: "bottom bottom", scrub: true } });
