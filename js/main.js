@@ -1,7 +1,7 @@
 /* =========================================================
-   SANART — «Одна струна»
-   Струна, натянутая через весь сайт: её можно дёрнуть курсором,
-   она реагирует на скролл, звук и меняет цвет от главы к главе.
+   SANART — «Поле нот»
+   Ноты плывут через весь сайт: разлетаются от курсора и пальца,
+   звучат при касании, реагируют на скролл и меняют цвет по главам.
    ========================================================= */
 (() => {
   "use strict";
@@ -147,23 +147,40 @@
   });
 
   /* =========================================================
-     STRING — связующий объект всего сайта
+     NOTES — поле нот через весь сайт
+     Ноты плывут вверх, реагируют на скролл (параллакс по глубине),
+     разлетаются от курсора/пальца и «звучат» при касании.
+     API прежний: setColor / impulse / pluckAt / W.
      ========================================================= */
   const String_ = (() => {
     const cv = $("#string"), ctx = cv.getContext("2d");
-    const N = 110;
-    const y = new Float32Array(N), v = new Float32Array(N);
-    let W = 0, H = 0, dpr = 1, baseY = 0, t = 0;
-    const col = { r: 255, g: 210, b: 63 }, target = { r: 255, g: 210, b: 63 };
-    let lastNote = 0;
+    const glyphs = ["\u266A", "\u266B", "\u2669", "\u266C", "\u266A", "\u266B"];
+    const FONT = '"Apple Symbols", "Segoe UI Symbol", "Noto Music", "DejaVu Sans", serif';
     const penta = [57, 60, 62, 64, 67, 69, 72, 74, 76, 79, 81];
+    const col = { r: 255, g: 210, b: 63 }, target = { r: 255, g: 210, b: 63 };
+    let W = 0, H = 0, dpr = 1, t = 0, lastNote = 0, kick = 0;
+    let notes = [];
+
+    const rnd = (a, b) => a + Math.random() * (b - a);
+    function make(yPos) {
+      const z = Math.pow(Math.random(), 1.6) * 0.75 + 0.25; // глубина: больше дальних
+      return {
+        x: rnd(0, W), y: yPos ?? rnd(0, H), z,
+        g: glyphs[(Math.random() * glyphs.length) | 0],
+        s: 12 + z * 26, rot: rnd(-0.4, 0.4), vr: 0,
+        vx: 0, vy: 0, ph: rnd(0, Math.PI * 2), glow: 0, cd: 0
+      };
+    }
 
     function resize() {
       dpr = Math.min(devicePixelRatio || 1, 2);
       W = innerWidth; H = innerHeight;
       cv.width = W * dpr; cv.height = H * dpr;
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-      baseY = H * 0.5;
+      const want = Math.round(clamp((W * H) / 24000, 16, 48));
+      while (notes.length < want) notes.push(make());
+      notes.length = want;
+      notes.forEach((n) => { if (n.x > W) n.x = rnd(0, W); if (n.y > H + 40) n.y = rnd(0, H); });
     }
     resize();
     addEventListener("resize", resize);
@@ -173,47 +190,68 @@
       target.r = (n >> 16) & 255; target.g = (n >> 8) & 255; target.b = n & 255;
     }
 
-    function impulse(xPx, force, spread = 7) {
-      const idx = Math.round((xPx / W) * (N - 1));
-      for (let j = Math.max(1, idx - spread * 2); j < Math.min(N - 1, idx + spread * 2); j++) {
-        const d = j - idx;
-        v[j] += force * Math.exp(-(d * d) / (spread * spread * 0.5));
-      }
+    function play(x) {
+      const now = performance.now();
+      if (now - lastNote < 110) return;
+      lastNote = now;
+      const k = clamp(Math.floor((x / W) * penta.length), 0, penta.length - 1);
+      Sound.glass(Sound.hz(penta[k]));
     }
 
-    function pluckAt(xPx, force) {
-      impulse(xPx, force);
-      const now = performance.now();
-      if (now - lastNote > 110) {
-        lastNote = now;
-        const k = clamp(Math.floor((xPx / W) * penta.length), 0, penta.length - 1);
-        Sound.glass(Sound.hz(penta[k]));
+    // толчок нот вокруг точки x (бывший «щипок струны»); force < 0 — вверх
+    function impulse(xPx, force, spread = 7) {
+      const r = (spread / 110) * W * 2.4 + 40;
+      for (const n of notes) {
+        const d = Math.abs(n.x - xPx);
+        if (d > r) continue;
+        const f = 1 - d / r;
+        n.vy += force * 0.22 * f * (0.5 + n.z);
+        n.vx += (n.x - xPx) / r * Math.abs(force) * 0.12 * f;
+        n.vr += rnd(-0.06, 0.06) * f * Math.abs(force) * 0.1;
+        n.glow = Math.max(n.glow, f);
       }
     }
+    function pluckAt(xPx, force) { impulse(xPx, force); play(xPx); }
 
     function step() {
       t += 0.016;
-      // физика струны (волновое уравнение с затуханием)
-      for (let s = 0; s < 3; s++) {
-        for (let i = 1; i < N - 1; i++) {
-          const a = (y[i - 1] + y[i + 1] - 2 * y[i]) * 0.3 - v[i] * 0.011 - y[i] * 0.0012;
-          v[i] += a;
-        }
-        for (let i = 1; i < N - 1; i++) y[i] += v[i];
-      }
+      const sv = clamp(scrollVel, -80, 80);
+      kick = lerp(kick, Math.min(Math.abs(sv), 60) / 60, 0.12);
+      const R = isTouch ? 90 : 120;
+      const speed = Math.hypot(mouse.vx, mouse.vy);
 
-      // курсор пересёк струну → щипок
-      if (mouse.moved) {
-        const xi = clamp(Math.round((mouse.x / W) * (N - 1)), 1, N - 2);
-        const lineY = baseY + y[xi];
-        const prev = mouse.py - lineY, cur = mouse.y - lineY;
-        if (Math.sign(prev) !== Math.sign(cur) && Math.abs(mouse.vy) > 0.5) {
-          pluckAt(mouse.x, clamp(mouse.vy * 0.55, -26, 26));
-        } else if (Math.abs(cur) < 46) {
-          // струна тянется за пальцем
-          impulse(mouse.x, (cur - y[xi] * 0.2) * 0.012, 5);
+      for (const n of notes) {
+        // дрейф вверх + лёгкое покачивание
+        n.y -= 0.12 + n.z * 0.32;
+        n.x += Math.sin(t * 0.7 + n.ph) * 0.25 * n.z;
+        // скролл: ближние ноты летят быстрее (параллакс) и крутятся
+        n.y -= sv * (0.18 + n.z * 0.75);
+        n.vr += sv * 0.00035 * n.z;
+
+        // курсор / палец: отталкивание и «звучание» при касании
+        if (mouse.moved) {
+          const dx = n.x - mouse.x, dy = n.y - mouse.y, d = Math.hypot(dx, dy);
+          if (d < R && d > 0.1) {
+            const f = (1 - d / R) * (0.6 + n.z);
+            n.vx += (dx / d) * f * 0.9; n.vy += (dy / d) * f * 0.9;
+            if (d < n.s * 1.2 + 10 && speed > 2.5 && n.cd <= 0) {
+              n.glow = 1; n.cd = 40; n.vr += rnd(-0.12, 0.12);
+              play(n.x);
+            }
+          }
         }
+
+        n.x += n.vx; n.y += n.vy;
+        n.vx *= 0.93; n.vy *= 0.93;
+        n.rot += n.vr; n.vr *= 0.94; n.rot *= 0.995;
+        n.glow *= 0.955; if (n.cd > 0) n.cd--;
+
+        // бесконечная лента: ушедшие за край возвращаются с другой стороны
+        if (n.y < -50) { Object.assign(n, make(H + 40)); }
+        else if (n.y > H + 50) { Object.assign(n, make(-40)); }
+        if (n.x < -40) n.x = W + 30; else if (n.x > W + 40) n.x = -30;
       }
+      if (!isTouch) { mouse.vx *= 0.9; mouse.vy *= 0.9; }
 
       col.r = lerp(col.r, target.r, 0.04); col.g = lerp(col.g, target.g, 0.04); col.b = lerp(col.b, target.b, 0.04);
       draw();
@@ -222,34 +260,23 @@
 
     function draw() {
       ctx.clearRect(0, 0, W, H);
-      const amp = 2 + Math.min(Math.abs(scrollVel) * 0.9, 46);
       const c = `${col.r | 0},${col.g | 0},${col.b | 0}`;
-      const pts = [];
-      for (let i = 0; i < N; i++) {
-        const u = i / (N - 1);
-        const env = Math.sin(Math.PI * u);
-        const idle = Math.sin(u * 14 + t * 1.7) * amp * env + Math.sin(u * 5 - t * 1.1) * amp * 0.5 * env;
-        pts.push([u * W, baseY + y[i] + idle]);
-      }
-      const path = (off, k) => {
-        ctx.beginPath();
-        ctx.moveTo(pts[0][0], pts[0][1] + off);
-        for (let i = 1; i < N - 1; i++) {
-          const xc = (pts[i][0] + pts[i + 1][0]) / 2;
-          const yc = ((pts[i][1] - baseY) * k + baseY + (pts[i + 1][1] - baseY) * k + baseY) / 2 + off;
-          ctx.quadraticCurveTo(pts[i][0], (pts[i][1] - baseY) * k + baseY + off, xc, yc);
+      ctx.textAlign = "center"; ctx.textBaseline = "middle";
+      for (const n of notes) {
+        const a = clamp(0.1 + n.z * 0.38 + n.glow * 0.55 + kick * 0.12 * n.z, 0, 1);
+        const size = n.s * (1 + n.glow * 0.35 + kick * 0.18 * n.z);
+        ctx.save();
+        ctx.translate(n.x, n.y);
+        ctx.rotate(n.rot + Math.sin(t + n.ph) * 0.08);
+        ctx.font = `${size | 0}px ${FONT}`;
+        if (n.glow > 0.08) {
+          ctx.shadowColor = `rgba(${c},${0.9 * n.glow})`;
+          ctx.shadowBlur = 18 * n.glow;
         }
-        ctx.lineTo(pts[N - 1][0], pts[N - 1][1] + off);
-      };
-      // обертоны
-      ctx.lineWidth = 1;
-      ctx.strokeStyle = `rgba(${c},0.07)`; path(-14, -0.6); ctx.stroke();
-      ctx.strokeStyle = `rgba(${c},0.05)`; path(16, 0.45); ctx.stroke();
-      // свечение
-      ctx.lineWidth = 9; ctx.strokeStyle = `rgba(${c},0.06)`; path(0, 1); ctx.stroke();
-      ctx.lineWidth = 3.5; ctx.strokeStyle = `rgba(${c},0.14)`; path(0, 1); ctx.stroke();
-      // сама струна
-      ctx.lineWidth = 1.3; ctx.strokeStyle = `rgba(${c},0.85)`; path(0, 1); ctx.stroke();
+        ctx.fillStyle = `rgba(${c},${a})`;
+        ctx.fillText(n.g, 0, 0);
+        ctx.restore();
+      }
     }
 
     if (!reduce) requestAnimationFrame(step); else draw();
@@ -300,8 +327,9 @@
     addEventListener("touchmove", (e) => {
       const tt = e.touches[0];
       mouse.px = mouse.x; mouse.py = mouse.y; mouse.x = tt.clientX; mouse.y = tt.clientY;
-      mouse.vy = mouse.y - mouse.py; mouse.moved = true;
+      mouse.vx = mouse.x - mouse.px; mouse.vy = mouse.y - mouse.py; mouse.moved = true;
     }, { passive: true });
+    addEventListener("touchend", () => { mouse.vx = 0; mouse.vy = 0; mouse.moved = false; }, { passive: true });
   }
 
   // ноты, вылетающие при клике
